@@ -18,6 +18,7 @@ from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from nti.schema.field import Number
+from nti.schema.field import ValidDatetime
 
 
 class IDefaultPublished(interface.Interface):
