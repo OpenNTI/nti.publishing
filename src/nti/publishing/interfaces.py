@@ -7,6 +7,8 @@
 from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
+logger = __import__('logging').getLogger(__name__)
+
 from zope import component
 from zope import interface
 
@@ -84,13 +86,13 @@ class ICalendarPublishableMixin(interface.Interface):
     publishBeginning = ValidDatetime(
         title=u"This object is not available before this time",
         description=u"When present, this specifies the time instant at which "
-                     "this obj is to be available.",
+                    u"this obj is to be available.",
         required=False)
 
     publishEnding = ValidDatetime(
         title=u"This object is not available after this time",
         description=u"When present, this specifies the last instance at which "
-                    "this obj is to be available.",
+                    u"this obj is to be available.",
         required=False)
 
 
