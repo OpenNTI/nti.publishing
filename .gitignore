@@ -1,4 +1,15 @@
-/.project
-/.pydevproject
-/.settings/
-/.tox/
+*.py[cod]
+
+.project
+.pydevproject
+.settings/
+
+# Distribution / packaging
+build/
+dist/
+
+*.egg-info
+.tox/
+.coverage
+htmlcov/
+doc/_build/
