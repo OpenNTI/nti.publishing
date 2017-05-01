@@ -16,6 +16,8 @@ does_not = is_not
 from nti.testing.matchers import validly_provides
 from nti.testing.matchers import verifiably_provides
 
+from nti.testing.time import time_monotonically_increases
+
 import unittest
 
 from datetime import datetime
@@ -27,8 +29,6 @@ from nti.publishing.interfaces import ICalendarPublishable
 from nti.publishing.mixins import CalendarPublishableMixin
 
 from nti.publishing.tests import SharedConfiguringTestLayer
-
-from nti.testing.time import time_monotonically_increases
 
 
 class TestMixins(unittest.TestCase):

@@ -66,7 +66,7 @@ class PublishableMixin(object):
 
     def is_published(self, *args, **kwargs):
         interface =  kwargs.get('interface', None) \
-            or getattr(self, '__publication_predicate_interface__', None)
+                  or getattr(self, '__publication_predicate_interface__', None)
         if interface is not None:
             kwargs['interface'] = interface
         return is_published(self, *args, **kwargs)
