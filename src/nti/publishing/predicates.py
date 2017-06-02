@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-.. $Id: predicates.py 104181 2017-01-12 18:22:00Z carlos.sanchez $
+.. $Id$
 """
 
 from __future__ import print_function, absolute_import, division
