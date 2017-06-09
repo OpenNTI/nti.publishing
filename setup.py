@@ -16,6 +16,7 @@ def _read(fname):
     with codecs.open(fname, encoding='utf-8') as f:
         return f.read()
 
+
 setup(
     name='nti.publishing',
     version=_read('version.txt').strip(),
@@ -55,5 +56,4 @@ setup(
         'test': TESTS_REQUIRE,
     },
     entry_points=entry_points,
-    test_suite="nti.publishing.tests",
 )
