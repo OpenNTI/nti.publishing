@@ -44,23 +44,23 @@ class PublishableMixin(object):
         self.publishLastModified = time.time()
     updatePublishLastModified = _update_publish_last_mod = update_publish_last_mod
 
-    def do_publish(self, event=True, **kwargs):
+    def do_publish(self, event=True, **unused_kwargs):
         interface.alsoProvides(self, IDefaultPublished)
         if event:
             notify(ObjectPublishedEvent(self))
         self.update_publish_last_mod()
 
-    def publish(self, *args, **kwargs):
+    def publish(self, *unused_args, **kwargs):
         if not self.is_published():
             self.do_publish(**kwargs)
 
-    def do_unpublish(self, event=True, **kwargs):
+    def do_unpublish(self, event=True, **unused_kwargs):
         interface.noLongerProvides(self, IDefaultPublished)
         if event:
             notify(ObjectUnpublishedEvent(self))
         self.update_publish_last_mod()
 
-    def unpublish(self, *args, **kwargs):
+    def unpublish(self, *unused_args, **kwargs):
         if self.is_published():
             self.do_unpublish(**kwargs)
 
@@ -92,7 +92,7 @@ class CalendarPublishableMixin(PublishableMixin):
         self.publishEnding = end
         self.publishBeginning = start
 
-    def unpublish(self, *args, **kwargs):
+    def unpublish(self, *unused_args, **kwargs):
         self.do_unpublish(**kwargs)
         self.publishEnding = None
         self.publishBeginning = None

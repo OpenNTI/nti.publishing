@@ -30,7 +30,7 @@ class DefaultPublishablePredicate(object):
     def __init__(self, *args):
         pass
 
-    def is_published(self, publishable, *args, **kwargs):
+    def is_published(self, publishable, *unused_args, **unused_kwargs):
         return IDefaultPublished.providedBy(publishable)
     isPublished = is_published
 
@@ -44,7 +44,7 @@ class DefaultCalendarPublishablePredicate(object):
     def __init__(self, *args):
         pass
 
-    def is_published(self, publishable, *args, **kwargs):
+    def is_published(self, publishable, *unused_args, **unused_kwargs):
         """
         Published if either explicitly published or after
         our start date and before our end date, if provided.
