@@ -17,13 +17,7 @@ Predicates
 
 .. automodule:: nti.publishing.predicates
 
-Subscribers
-===========
-
-.. automodule:: nti.publishing.subscribers
-
 Utilities
 =========
 
-.. automodule:: nti.base.utils
-
+.. automodule:: nti.publishing.utils
