@@ -105,8 +105,8 @@ html_static_path = ['_static']
 
 # -- Options for HTMLHelp output ------------------------------------------
 
-# Output file publishing name for HTML help builder.
-htmlhelp_publishingname = 'ntipublishingdoc'
+# Output file base name for HTML help builder.
+htmlhelp_basename = 'ntipublishingdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
