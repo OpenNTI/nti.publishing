@@ -47,11 +47,16 @@ setup(
     tests_require=TESTS_REQUIRE,
     install_requires=[
         'setuptools',
+        'BTrees',
         'nti.schema',
+        'nti.zope_catalog',
         'zope.component',
         'zope.event',
         'zope.interface',
+        'zope.intid',
         'zope.lifecycleevent',
+        'zope.location',
+        'zope.mimetype',
         'zope.security',
     ],
     extras_require={
