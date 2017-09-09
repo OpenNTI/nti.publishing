@@ -40,6 +40,9 @@ PUBLISHING_CATALOG_NAME = 'nti.dataserver.++etc++publishing-catalog'
 #: Published object MimeType
 IX_MIMETYPE = 'mimeType'
 
+#: Publish flag
+IX_PUBLISHED = 'published'
+
 #: Publish Ending
 IX_PUBLISH_ENDING = 'publishEnding'
 
@@ -145,6 +148,23 @@ class ValidatingCalendarPublishable(object):
         raise TypeError()
 
 
+class ValidatingPublished(object):
+
+    __slots__ = (IX_PUBLISHED,)
+
+    def __init__(self, obj, unused_default):
+        if IPublishable.providedBy(obj):
+            self.published = obj.is_published()
+
+    def __reduce__(self):
+        raise TypeError()
+
+
+class PublishedIndex(AttributeValueIndex):
+    default_field_name = IX_PUBLISHED
+    default_interface = ValidatingPublished
+
+
 class CalendarPublishableIndex(AttributeValueIndex):
     default_field_name = IX_CALENDAR_PUBLISHABLE
     default_interface = ValidatingCalendarPublishable
@@ -166,6 +186,7 @@ def create_publishing_catalog(catalog=None, family=BTrees.family64):
     if catalog is None:
         catalog = MetadataPublishingCatalog(family=family)
     for name, clazz in ((IX_MIMETYPE, MimeTypeIndex),
+                        (IX_PUBLISHED, PublishedIndex),
                         (IX_PUBLISH_ENDING, PublishEndingIndex),
                         (IX_PUBLISH_BEGINNING, PublishBeginningIndex),
                         (IX_CALENDAR_PUBLISHABLE, CalendarPublishableIndex),

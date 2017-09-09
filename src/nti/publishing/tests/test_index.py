@@ -20,6 +20,7 @@ from datetime import datetime
 import BTrees
 
 from nti.publishing.index import IX_MIMETYPE
+from nti.publishing.index import IX_PUBLISHED
 from nti.publishing.index import IX_PUBLISH_ENDING
 from nti.publishing.index import IX_PUBLISH_BEGINNING
 from nti.publishing.index import IX_CALENDAR_PUBLISHABLE
@@ -48,7 +49,7 @@ class TestIndex(unittest.TestCase):
         catalog = create_publishing_catalog(family=BTrees.family64)
         assert_that(isinstance(catalog, MetadataPublishingCatalog),
                     is_(True))
-        assert_that(catalog, has_length(5))
+        assert_that(catalog, has_length(6))
 
         # test index
         catalog.super_index_doc(1, publishable)
@@ -56,6 +57,10 @@ class TestIndex(unittest.TestCase):
         index = catalog[IX_MIMETYPE]
         assert_that(index.documents_to_values,
                     has_entry(1, is_('application/vnd.nextthought.publishable')))
+
+        index = catalog[IX_PUBLISHED]
+        assert_that(index.documents_to_values,
+                    has_entry(1, is_(False)))
 
         index = catalog[IX_CALENDAR_PUBLISHABLE]
         assert_that(index.documents_to_values,
