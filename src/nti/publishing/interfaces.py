@@ -165,3 +165,21 @@ def get_calendar_publishable_predicate(publishable, interface=None):
     def uber_filter(publishable, *args, **kwargs):
         return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
     return uber_filter
+
+
+class IPublishables(interface.Interface):
+    """
+    A predicate to return publishable objects 
+
+    These will typically be registered as named utilities
+    """
+
+    def iter_objects():
+        pass
+
+
+def get_publishables():
+    predicates = component.getUtilitiesFor(IPublishables)
+    for _, predicate in list(predicates):
+        for obj in predicate.iter_objects():
+            yield obj
