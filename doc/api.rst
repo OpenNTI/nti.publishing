@@ -2,6 +2,11 @@
  Reference
 ===========
 
+Index
+=====
+
+.. automodule:: nti.publishing.index
+
 Interfaces
 ==========
 
