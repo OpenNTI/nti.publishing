@@ -123,9 +123,12 @@ class ValidatingMimeType(object):
 
     def __init__(self, obj, unused_default):
         if IPublishable.providedBy(obj):
-            source = IContentTypeAware(obj, obj)
-            self.mimeType = getattr(source, 'mimeType', None) \
-                         or getattr(source, 'mime_type', None)
+            for proxy in (obj, IContentTypeAware(obj, None)):
+                mimeType = getattr(proxy, 'mimeType', None) \
+                        or getattr(proxy, 'mime_type', None)
+                if mimeType:
+                    self.mimeType = mimeType
+                    break
 
     def __reduce__(self):
         raise TypeError()
