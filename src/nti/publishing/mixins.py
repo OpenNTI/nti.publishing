@@ -7,8 +7,6 @@
 from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
-logger = __import__('logging').getLogger(__name__)
-
 import time
 
 from zope import interface
@@ -25,6 +23,8 @@ from nti.publishing.interfaces import CalendarPublishableModifiedEvent
 
 from nti.publishing.utils import is_published
 from nti.publishing.utils import is_calendar_published
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @interface.implementer(IPublishable)

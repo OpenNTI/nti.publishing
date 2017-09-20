@@ -7,8 +7,6 @@
 from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
-logger = __import__('logging').getLogger(__name__)
-
 from datetime import datetime
 
 from zope import component
@@ -19,6 +17,8 @@ from nti.publishing.interfaces import IDefaultPublished
 from nti.publishing.interfaces import ICalendarPublishable
 from nti.publishing.interfaces import IPublishablePredicate
 from nti.publishing.interfaces import ICalendarPublishablePredicate
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @component.adapter(IPublishable)

@@ -7,8 +7,6 @@
 from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
-logger = __import__('logging').getLogger(__name__)
-
 import time
 
 from zope import component
@@ -54,6 +52,8 @@ IX_CALENDAR_PUBLISHABLE = 'calendarPublishable'
 
 #: Transaction time
 IX_PUBLISH_LAST_MODIFIED = 'publishLastModified'
+
+logger = __import__('logging').getLogger(__name__)
 
 
 class PublishLastModifiedRawIndex(RawIntegerValueIndex):
