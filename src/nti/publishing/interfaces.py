@@ -7,8 +7,6 @@
 from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
-logger = __import__('logging').getLogger(__name__)
-
 from zope import component
 from zope import interface
 
@@ -21,6 +19,8 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from nti.schema.field import Number
 from nti.schema.field import ValidDatetime
+
+logger = __import__('logging').getLogger(__name__)
 
 
 class IDefaultPublished(interface.Interface):
