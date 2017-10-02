@@ -9,14 +9,20 @@ from __future__ import absolute_import
 # pylint: disable=W0212,R0904
 
 from hamcrest import is_
+from hamcrest import none
 from hamcrest import is_not
 from hamcrest import has_entry
 from hamcrest import has_length
 from hamcrest import assert_that
+from nti.testing.matchers import is_empty
 does_not = is_not
 
+import fudge
+import pickle
 import unittest
 from datetime import datetime
+
+from zope import component
 
 import BTrees
 
@@ -25,9 +31,17 @@ from nti.publishing.index import IX_PUBLISHED
 from nti.publishing.index import IX_PUBLISH_ENDING
 from nti.publishing.index import IX_PUBLISH_BEGINNING
 from nti.publishing.index import IX_CALENDAR_PUBLISHABLE
+from nti.publishing.index import PUBLISHING_CATALOG_NAME
 from nti.publishing.index import IX_PUBLISH_LAST_MODIFIED
 
+from nti.publishing.index import ValidatingMimeType
+from nti.publishing.index import ValidatingPublished
+from nti.publishing.index import ValidatingPublishEnding
+from nti.publishing.index import ValidatingPublishBeginning
+from nti.publishing.index import ValidatingCalendarPublishable
+
 from nti.publishing.index import create_publishing_catalog
+from nti.publishing.index import install_publishing_catalog
 
 from nti.publishing.index import MetadataPublishingCatalog
 
@@ -35,10 +49,21 @@ from nti.publishing.mixins import CalendarPublishableMixin
 
 from nti.publishing.tests import SharedConfiguringTestLayer
 
+from nti.zope_catalog.interfaces import IMetadataCatalog
+
 
 class TestIndex(unittest.TestCase):
 
     layer = SharedConfiguringTestLayer
+
+    def test_pickle(self):
+        for factory in (ValidatingCalendarPublishable,
+                        ValidatingPublishBeginning, 
+                        ValidatingPublishEnding,
+                        ValidatingPublished,
+                        ValidatingMimeType):
+            with self.assertRaises(TypeError):
+                pickle.dumps(factory())
 
     def test_publishable(self):
         publishable = CalendarPublishableMixin()
@@ -52,8 +77,13 @@ class TestIndex(unittest.TestCase):
                     is_(True))
         assert_that(catalog, has_length(6))
 
+        # no effect
+        catalog.index_doc(1, publishable)
+        index = catalog[IX_MIMETYPE]
+        assert_that(index.documents_to_values, is_empty())
+
         # test index
-        catalog.super_index_doc(1, publishable)
+        catalog.force_index_doc(1, publishable)
 
         index = catalog[IX_MIMETYPE]
         assert_that(index.documents_to_values,
@@ -78,3 +108,12 @@ class TestIndex(unittest.TestCase):
         index = catalog[IX_PUBLISH_ENDING]
         assert_that(index.index.documents_to_values,
                     has_entry(1, is_(4656422947538337792)))
+        
+    def test_install_publishing_catalog(self):
+        intids = fudge.Fake().provides('register').has_attr(family=BTrees.family64)
+        catalog = install_publishing_catalog(component, intids)
+        assert_that(catalog, is_not(none()))
+        assert_that(install_publishing_catalog(component, intids),
+                    is_(catalog))
+        component.getGlobalSiteManager().unregisterUtility(catalog, IMetadataCatalog,
+                                                           PUBLISHING_CATALOG_NAME)

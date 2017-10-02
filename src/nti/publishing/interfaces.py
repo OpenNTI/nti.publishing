@@ -176,7 +176,9 @@ class IPublishables(interface.Interface):
     """
 
     def iter_objects():
-        pass
+        """
+        return an iterable of :class:`.IPublishable` objects
+        """
 
 
 def get_publishables():

@@ -24,9 +24,11 @@ import unittest
 from datetime import datetime
 from datetime import timedelta
 
+from nti.publishing.interfaces import IPublishable
 from nti.publishing.interfaces import IDefaultPublished
 from nti.publishing.interfaces import ICalendarPublishable
 
+from nti.publishing.mixins import PublishableMixin
 from nti.publishing.mixins import CalendarPublishableMixin
 
 from nti.publishing.tests import SharedConfiguringTestLayer
@@ -37,13 +39,26 @@ class TestMixins(unittest.TestCase):
     layer = SharedConfiguringTestLayer
 
     def test_plublishable(self):
+        p = PublishableMixin()
+        assert_that(p, validly_provides(IPublishable))
+        assert_that(p, verifiably_provides(IPublishable))
+
+        p.publish()
+        assert_that(p, verifiably_provides(IDefaultPublished))
+        assert_that(p.isPublished(interface=IPublishable), is_(True))
+
+        p.unpublish()
+        assert_that(p, does_not(verifiably_provides(IDefaultPublished)))
+        assert_that(p.isPublished(), is_(False))
+        
+    def test_caldendar_plublishable(self):
         c = CalendarPublishableMixin()
         assert_that(c, validly_provides(ICalendarPublishable))
         assert_that(c, verifiably_provides(ICalendarPublishable))
 
         c.publish()
         assert_that(c, verifiably_provides(IDefaultPublished))
-        assert_that(c.isPublished(), is_(True))
+        assert_that(c.isPublished(interface=ICalendarPublishable), is_(True))
 
         c.unpublish()
         assert_that(c, does_not(verifiably_provides(IDefaultPublished)))
