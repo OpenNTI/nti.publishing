@@ -72,7 +72,7 @@ class ValidatingPublishBeginning(object):
 
     __slots__ = (IX_PUBLISH_BEGINNING,)
 
-    def __init__(self, obj, unused_default):
+    def __init__(self, obj=None, unused_default=None):
         if      ICalendarPublishable.providedBy(obj) \
             and obj.publishBeginning is not None:
             ts = time.mktime(obj.publishBeginning.timetuple())
@@ -97,7 +97,7 @@ class ValidatingPublishEnding(object):
 
     __slots__ = (IX_PUBLISH_ENDING,)
 
-    def __init__(self, obj, unused_default):
+    def __init__(self, obj=None, unused_default=None):
         if      ICalendarPublishable.providedBy(obj) \
             and obj.publishEnding is not None:
             ts = time.mktime(obj.publishEnding.timetuple())
@@ -122,7 +122,7 @@ class ValidatingMimeType(object):
 
     __slots__ = (IX_MIMETYPE,)
 
-    def __init__(self, obj, unused_default):
+    def __init__(self, obj=None, unused_default=None):
         if IPublishable.providedBy(obj):
             for proxy in (obj, IContentTypeAware(obj, None)):
                 mimeType = getattr(proxy, 'mimeType', None) \
@@ -144,7 +144,7 @@ class ValidatingCalendarPublishable(object):
 
     __slots__ = (IX_CALENDAR_PUBLISHABLE,)
 
-    def __init__(self, obj, unused_default):
+    def __init__(self, obj=None, unused_default=None):
         if IPublishable.providedBy(obj):
             self.calendarPublishable = ICalendarPublishable.providedBy(obj)
 
@@ -156,7 +156,7 @@ class ValidatingPublished(object):
 
     __slots__ = (IX_PUBLISHED,)
 
-    def __init__(self, obj, unused_default):
+    def __init__(self, obj=None, unused_default=None):
         if IPublishable.providedBy(obj):
             self.published = obj.is_published()
 

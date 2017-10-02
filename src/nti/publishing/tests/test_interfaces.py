@@ -8,12 +8,32 @@ from __future__ import absolute_import
 # disable: accessing protected members, too many methods
 # pylint: disable=W0212,R0904
 
+from hamcrest import has_length
+from hamcrest import assert_that
+
 import unittest
 
-from zope.dottedname import resolve as dottedname
+from zope import component
+from zope import interface
+
+from nti.publishing.interfaces import IPublishables
+from nti.publishing.interfaces import get_publishables
+
+from nti.publishing.mixins import PublishableMixin
+
+
+@interface.implementer(IPublishables)
+class FakePublishables(object):
+
+    def iter_objects(self):
+        return (PublishableMixin(),)
 
 
 class TestInterfaces(unittest.TestCase):
 
-    def test_import_interfaces(self):
-        dottedname.resolve('nti.publishing.interfaces')
+    def test_get_recordables(self):
+        publishables = FakePublishables()
+        component.getGlobalSiteManager().registerUtility(publishables, IPublishables)
+        assert_that(list(get_publishables()),
+                    has_length(1))
+        component.getGlobalSiteManager().unregisterUtility(publishables, IPublishables)
