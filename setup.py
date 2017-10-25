@@ -24,7 +24,11 @@ setup(
     author='Jason Madden',
     author_email='jason@nextthought.com',
     description="NTI publishing",
-    long_description=(_read('README.rst') + '\n\n' + _read("CHANGES.rst")),
+    long_description=(
+        _read('README.rst')
+        + '\n\n'
+        + _read("CHANGES.rst")
+    ),
     license='Apache',
     keywords='publishing',
     classifiers=[
