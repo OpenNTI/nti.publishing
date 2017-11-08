@@ -14,7 +14,6 @@ from hamcrest import is_not
 from hamcrest import has_entry
 from hamcrest import has_length
 from hamcrest import assert_that
-from nti.testing.matchers import is_empty
 does_not = is_not
 
 import fudge
@@ -49,7 +48,7 @@ from nti.publishing.mixins import CalendarPublishableMixin
 
 from nti.publishing.tests import SharedConfiguringTestLayer
 
-from nti.zope_catalog.interfaces import IMetadataCatalog
+from nti.zope_catalog.interfaces import IDeferredCatalog
 
 
 class TestIndex(unittest.TestCase):
@@ -76,11 +75,6 @@ class TestIndex(unittest.TestCase):
         assert_that(isinstance(catalog, MetadataPublishingCatalog),
                     is_(True))
         assert_that(catalog, has_length(6))
-
-        # no effect
-        catalog.index_doc(1, publishable)
-        index = catalog[IX_MIMETYPE]
-        assert_that(index.documents_to_values, is_empty())
 
         # test index
         catalog.force_index_doc(1, publishable)
@@ -115,5 +109,5 @@ class TestIndex(unittest.TestCase):
         assert_that(catalog, is_not(none()))
         assert_that(install_publishing_catalog(component, intids),
                     is_(catalog))
-        component.getGlobalSiteManager().unregisterUtility(catalog, IMetadataCatalog,
+        component.getGlobalSiteManager().unregisterUtility(catalog, IDeferredCatalog,
                                                            PUBLISHING_CATALOG_NAME)

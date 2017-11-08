@@ -24,7 +24,7 @@ import BTrees
 from nti.publishing.interfaces import IPublishable
 from nti.publishing.interfaces import ICalendarPublishable
 
-from nti.zope_catalog.catalog import Catalog
+from nti.zope_catalog.catalog import DeferredCatalog
 
 from nti.zope_catalog.datetime import TimestampToNormalized64BitIntNormalizer
 
@@ -32,7 +32,7 @@ from nti.zope_catalog.index import AttributeValueIndex
 from nti.zope_catalog.index import NormalizationWrapper
 from nti.zope_catalog.index import IntegerValueIndex as RawIntegerValueIndex
 
-from nti.zope_catalog.interfaces import IMetadataCatalog
+from nti.zope_catalog.interfaces import IDeferredCatalog
 
 PUBLISHING_CATALOG_NAME = 'nti.dataserver.++etc++publishing-catalog'
 
@@ -174,16 +174,11 @@ class CalendarPublishableIndex(AttributeValueIndex):
     default_interface = ValidatingCalendarPublishable
 
 
-@interface.implementer(IMetadataCatalog)
-class MetadataPublishingCatalog(Catalog):
+@interface.implementer(IDeferredCatalog)
+class MetadataPublishingCatalog(DeferredCatalog):
 
-    super_index_doc = Catalog.index_doc
-
-    def index_doc(self, docid, ob):
-        pass
-
-    def force_index_doc(self, docid, ob):
-        self.super_index_doc(docid, ob)
+    def force_index_doc(self, docid, ob):  # BWC
+        self.index_doc(docid, ob)
 
 
 def create_publishing_catalog(catalog=None, family=BTrees.family64):
@@ -202,7 +197,7 @@ def create_publishing_catalog(catalog=None, family=BTrees.family64):
 
 
 def get_publishing_catalog(registry=component):
-    return registry.queryUtility(IMetadataCatalog, PUBLISHING_CATALOG_NAME)
+    return registry.queryUtility(IDeferredCatalog, PUBLISHING_CATALOG_NAME)
 
 
 def install_publishing_catalog(site_manager_container, intids=None):
@@ -216,7 +211,7 @@ def install_publishing_catalog(site_manager_container, intids=None):
     locate(catalog, site_manager_container, PUBLISHING_CATALOG_NAME)
     intids.register(catalog)
     lsm.registerUtility(catalog,
-                        provided=IMetadataCatalog,
+                        provided=IDeferredCatalog,
                         name=PUBLISHING_CATALOG_NAME)
 
     for index in catalog.values():
