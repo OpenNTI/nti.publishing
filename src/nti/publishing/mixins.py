@@ -35,7 +35,7 @@ class PublishableMixin(object):
 
     __publication_predicate_interface__ = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable:useless-super-delegation
         super(PublishableMixin, self).__init__(*args, **kwargs)
 
     def update_publish_last_mod(self):
@@ -66,10 +66,10 @@ class PublishableMixin(object):
             self.do_unpublish(**kwargs)
 
     def is_published(self, *args, **kwargs):
-        interface =  kwargs.get('interface', None) \
-                  or getattr(self, '__publication_predicate_interface__', None)
-        if interface is not None:
-            kwargs['interface'] = interface
+        iface = kwargs.get('interface', None) \
+             or getattr(self, '__publication_predicate_interface__', None)
+        if iface is not None:
+            kwargs['interface'] = iface
         return is_published(self, *args, **kwargs)
     isPublished = is_published
 
@@ -80,6 +80,7 @@ class CalendarPublishableMixin(PublishableMixin):
     publishEnding = None
     publishBeginning = None
 
+    # pylint: disable=arguments-differ
     def publish(self, start=None, end=None, **kwargs):
         if start is None:
             # Explicit publish, reset any dates we have.
@@ -99,9 +100,9 @@ class CalendarPublishableMixin(PublishableMixin):
         self.publishBeginning = None
 
     def is_published(self, *args, **kwargs):
-        interface = kwargs.get('interface', None) \
-                 or getattr(self, '__publication_predicate_interface__', None)
-        if interface is not None:
-            kwargs['interface'] = interface
+        iface = kwargs.get('interface', None) \
+             or getattr(self, '__publication_predicate_interface__', None)
+        if iface is not None:
+            kwargs['interface'] = iface
         return is_calendar_published(self, *args, **kwargs)
     isPublished = is_published
