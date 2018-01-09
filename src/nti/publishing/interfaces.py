@@ -77,7 +77,7 @@ class IPublishable(interface.Interface):
         :param event: Notify unlock event
         """
 
-    def is_published(*args, **kwargs):
+    def is_published(*args, **kwargs):  # pylint: disable=no-method-argument
         """
         Return if this object is published
         """
