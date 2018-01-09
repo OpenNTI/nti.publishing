@@ -112,8 +112,8 @@ class ICalendarPublishableModifiedEvent(IObjectModifiedEvent, ICalendarPublishab
 @interface.implementer(ICalendarPublishableModifiedEvent)
 class CalendarPublishableModifiedEvent(ObjectModifiedEvent):
 
-    def __init__(self, obj, publishBeginning=None, publishEnding=None, *descriptions):
-        super(CalendarPublishableModifiedEvent, self).__init__(obj, *descriptions)
+    def __init__(self, obj, publishBeginning=None, publishEnding=None):
+        super(CalendarPublishableModifiedEvent, self).__init__(obj)
         self.publishEnding = publishEnding
         self.publishBeginning = publishBeginning
 
@@ -123,7 +123,7 @@ class INoPublishLink(interface.Interface):
     Marker interface for objects that are publishable but no links to
     publish operations should be provided
     """
-INoPublishLink.setTaggedValue('_ext_is_marker_interface', True)
+INoPublishLink.setTaggedValue('_ext_is_marker_interface', True)  # pylint: disable=no-value-for-parameter
 
 
 class IPublishablePredicate(interface.Interface):
@@ -132,7 +132,7 @@ class IPublishablePredicate(interface.Interface):
     is published
     """
 
-    def is_published(publishable, principal=None, context=None, *args, **kwargs):
+    def is_published(publishable, principal=None, context=None, **kwargs):
         """
         return if the specified publishable is published for the given
         principal and context
@@ -146,7 +146,7 @@ class ICalendarPublishablePredicate(interface.Interface):
     is published
     """
 
-    def is_published(publishable, principal=None, context=None, *args, **kwargs):
+    def is_published(publishable, principal=None, context=None, **kwargs):
         """
         return if the specified calendar publishable is published for the given
         principal and context
@@ -154,17 +154,19 @@ class ICalendarPublishablePredicate(interface.Interface):
     isPublished = is_published
 
 
-def get_publishable_predicate(publishable, interface=None):
+def get_publishable_predicate(publishable, interface=None):  # pylint: disable=redefined-outer-name
     interface = IPublishablePredicate if interface is None else interface
     predicates = list(component.subscribers((publishable,), interface))
+
     def uber_filter(publishable, *args, **kwargs):
         return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
     return uber_filter
 
 
-def get_calendar_publishable_predicate(publishable, interface=None):
+def get_calendar_publishable_predicate(publishable, interface=None):  # pylint: disable=redefined-outer-name
     interface = ICalendarPublishablePredicate if interface is None else interface
     predicates = list(component.subscribers((publishable,), interface))
+
     def uber_filter(publishable, *args, **kwargs):
         return all((p.is_published(publishable, *args, **kwargs) for p in predicates))
     return uber_filter
