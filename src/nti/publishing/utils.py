@@ -28,15 +28,17 @@ def current_principal(system=True):
 currentPrincipal = current_principal
 
 
-def is_published(self, interface=None, *args, **kwargs):
+def is_published(self, interface=None, *args, **kwargs):  # pylint: keyword-arg-before-vararg
     kwargs['principal'] = kwargs.get('principal') or current_principal()
     predicate = get_publishable_predicate(self, interface)
     return predicate(self, *args, **kwargs)
 isPublished = is_published
 
 
-def is_calendar_published(self, interface=None, *args, **kwargs):
+def is_calendar_published(self, interface=None, *args, **kwargs):  # pylint: keyword-arg-before-vararg
     kwargs['principal'] = kwargs.get('principal') or current_principal()
     predicate = get_calendar_publishable_predicate(self, interface)
     return predicate(self, *args, **kwargs)
+
+
 isCalendarPublished = is_calendar_published
