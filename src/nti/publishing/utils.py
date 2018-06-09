@@ -39,6 +39,4 @@ def is_calendar_published(self, interface=None, *args, **kwargs):  # pylint: key
     kwargs['principal'] = kwargs.get('principal') or current_principal()
     predicate = get_calendar_publishable_predicate(self, interface)
     return predicate(self, *args, **kwargs)
-
-
 isCalendarPublished = is_calendar_published
